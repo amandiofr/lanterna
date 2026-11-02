@@ -30,10 +30,15 @@ class TorchService : Service() {
     private lateinit var cameraManager: CameraManager
     private var cameraId: String? = null
 
+    // Set once the system confirms the torch is lit: the callback first replays the previous "off" state
+    private var confirmedOn = false
+
     // Stops the service if the torch is switched off elsewhere (quick settings, camera app...)
     private val torchCallback = object : CameraManager.TorchCallback() {
         override fun onTorchModeChanged(id: String, enabled: Boolean) {
-            if (id == cameraId && !enabled && isOn) stopSelf()
+            if (id != cameraId) return
+            if (enabled) confirmedOn = true
+            else if (confirmedOn && isOn) stopSelf()
         }
     }
 
@@ -86,7 +91,7 @@ class TorchService : Service() {
             PendingIntent.FLAG_IMMUTABLE
         )
         return Notification.Builder(this, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_menu_view)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(getString(R.string.notif_title))
             .setContentText(getString(R.string.notif_text))
             .setContentIntent(stop)
