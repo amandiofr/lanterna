@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lanterna</string>
+    <string name="channel_name">Lanterna</string>
+    <string name="notif_title">Lanterna acesa</string>
+    <string name="notif_text">Toque aqui para apagar</string>
+</resources>
